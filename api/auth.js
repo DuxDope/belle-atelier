@@ -1,4 +1,3 @@
-// POST /api/auth  → login admin, devuelve JWT
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 
@@ -17,19 +16,11 @@ module.exports = async function handler(req, res) {
   if (!adminEmail || !adminPassHash || !jwtSecret) {
     return res.status(500).json({ error: 'Admin no configurado en variables de entorno' });
   }
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email y contraseña requeridos' });
-  }
-
-  if (email.toLowerCase() !== adminEmail.toLowerCase()) {
-    return res.status(401).json({ error: 'Credenciales incorrectas' });
-  }
+  if (!email || !password) return res.status(400).json({ error: 'Email y contraseña requeridos' });
+  if (email.toLowerCase() !== adminEmail.toLowerCase()) return res.status(401).json({ error: 'Credenciales incorrectas' });
 
   const valid = await bcrypt.compare(password, adminPassHash);
-  if (!valid) {
-    return res.status(401).json({ error: 'Credenciales incorrectas' });
-  }
+  if (!valid) return res.status(401).json({ error: 'Credenciales incorrectas' });
 
   const token = jwt.sign({ role: 'admin' }, jwtSecret, { expiresIn: '8h' });
   return res.status(200).json({ token });

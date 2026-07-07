@@ -1,5 +1,3 @@
-// GET  /api/settings          → devuelve whatsapp y logo_url (público)
-// POST /api/settings          → actualiza settings (requiere admin)
 const { pool, ensureTables } = require('./db');
 
 module.exports = async function handler(req, res) {
@@ -31,16 +29,10 @@ module.exports = async function handler(req, res) {
 
       const { whatsapp, logo_url } = req.body;
       if (whatsapp !== undefined) {
-        await client.query(
-          `INSERT INTO settings (key,value) VALUES ('whatsapp',$1)
-           ON CONFLICT (key) DO UPDATE SET value=$1`, [whatsapp]
-        );
+        await client.query(`INSERT INTO settings (key,value) VALUES ('whatsapp',$1) ON CONFLICT (key) DO UPDATE SET value=$1`, [whatsapp]);
       }
       if (logo_url !== undefined) {
-        await client.query(
-          `INSERT INTO settings (key,value) VALUES ('logo_url',$1)
-           ON CONFLICT (key) DO UPDATE SET value=$1`, [logo_url]
-        );
+        await client.query(`INSERT INTO settings (key,value) VALUES ('logo_url',$1) ON CONFLICT (key) DO UPDATE SET value=$1`, [logo_url]);
       }
       return res.status(200).json({ ok: true });
     }

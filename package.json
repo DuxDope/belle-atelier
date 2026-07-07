@@ -1,11 +1,11 @@
 {
   "name": "belle-atelier",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Catálogo de maquillaje Belle Atelier",
   "dependencies": {
+    "pg": "^8.11.3",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.3",
-    "pg": "^8.22.0"
+    "jsonwebtoken": "^9.0.2"
   },
   "engines": {
     "node": "22.x"

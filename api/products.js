@@ -1,5 +1,3 @@
-// GET /api/products        → lista productos con variantes
-// POST /api/products       → crea producto con variantes
 const { pool, ensureTables } = require('./db');
 
 module.exports = async function handler(req, res) {
@@ -12,23 +10,16 @@ module.exports = async function handler(req, res) {
   try {
     await ensureTables(client);
 
-    // GET — listar todos los productos con sus variantes
     if (req.method === 'GET') {
-      const { rows: products } = await client.query(
-        'SELECT * FROM products ORDER BY created_at DESC'
-      );
-      const { rows: variants } = await client.query(
-        'SELECT * FROM variants ORDER BY created_at ASC'
-      );
+      const { rows: products } = await client.query('SELECT * FROM products ORDER BY created_at DESC');
+      const { rows: variants } = await client.query('SELECT * FROM variants ORDER BY created_at ASC');
       const result = products.map(p => ({
-        ...p,
-        desc: p.description,
+        ...p, desc: p.description,
         variants: variants.filter(v => v.product_id === p.id)
       }));
       return res.status(200).json(result);
     }
 
-    // POST — crear producto (requiere token admin)
     if (req.method === 'POST') {
       const auth = req.headers.authorization;
       if (!auth) return res.status(401).json({ error: 'No autorizado' });
@@ -40,12 +31,8 @@ module.exports = async function handler(req, res) {
       }
 
       const { name, brand, cat, desc, info, badge, emoji, image_url, variants } = req.body;
-      if (!name || !brand || !cat || !desc) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios' });
-      }
-      if (!variants || variants.length === 0) {
-        return res.status(400).json({ error: 'Agrega al menos un tono/variante' });
-      }
+      if (!name || !brand || !cat || !desc) return res.status(400).json({ error: 'Faltan campos obligatorios' });
+      if (!variants || !variants.length) return res.status(400).json({ error: 'Agrega al menos un tono' });
 
       const { rows: [product] } = await client.query(
         `INSERT INTO products (name, brand, cat, description, info, badge, emoji, image_url)
@@ -56,13 +43,11 @@ module.exports = async function handler(req, res) {
       const insertedVariants = [];
       for (const v of variants) {
         const { rows: [variant] } = await client.query(
-          `INSERT INTO variants (product_id, tone, price, stock, image_url)
-           VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+          `INSERT INTO variants (product_id, tone, price, stock, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
           [product.id, v.tone, Number(v.price)||0, Number(v.stock)||0, v.image_url||'']
         );
         insertedVariants.push(variant);
       }
-
       return res.status(201).json({ ...product, desc: product.description, variants: insertedVariants });
     }
 

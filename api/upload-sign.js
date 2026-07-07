@@ -19,9 +19,7 @@ module.exports = async function handler(req, res) {
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
   const apiKey    = process.env.CLOUDINARY_API_KEY;
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  if (!apiSecret || !apiKey || !cloudName) {
-    return res.status(500).json({ error: 'Cloudinary no configurado' });
-  }
+  if (!apiSecret || !apiKey || !cloudName) return res.status(500).json({ error: 'Cloudinary no configurado' });
 
   const timestamp = Math.round(Date.now() / 1000);
   const folder    = 'belle-atelier';
