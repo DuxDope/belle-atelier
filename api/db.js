@@ -33,9 +33,14 @@ async function ensureTables(client) {
       price      INTEGER NOT NULL,
       stock      INTEGER NOT NULL DEFAULT 0,
       image_url  TEXT DEFAULT '',
+      image_url2 TEXT DEFAULT '',
+      image_url3 TEXT DEFAULT '',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+  // Agregar columnas nuevas si ya existe la tabla (migracion segura)
+  await client.query(`ALTER TABLE variants ADD COLUMN IF NOT EXISTS image_url2 TEXT DEFAULT ''`);
+  await client.query(`ALTER TABLE variants ADD COLUMN IF NOT EXISTS image_url3 TEXT DEFAULT ''`);
   await client.query(`
     INSERT INTO settings (key, value) VALUES ('whatsapp', '56912345678')
     ON CONFLICT (key) DO NOTHING

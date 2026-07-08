@@ -71,19 +71,24 @@
 
 <!-- MODAL PRODUCTO -->
 <div class="modal-overlay" id="modal">
-  <div class="modal">
+  <div class="modal modal-wide">
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-inner">
-      <div class="modal-img" id="modal-img-wrap">
-        <span id="modal-emoji">💄</span>
-        <img id="modal-photo" src="" alt="" style="display:none">
+      <!-- Galería izquierda -->
+      <div class="modal-gallery">
+        <div class="gallery-main" id="gallery-main">
+          <span id="modal-emoji">💄</span>
+          <img id="modal-photo" src="" alt="" style="display:none">
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs"></div>
       </div>
+      <!-- Info derecha -->
       <div class="modal-info">
         <div class="modal-brand" id="modal-brand"></div>
         <div class="modal-name" id="modal-name"></div>
         <div class="modal-desc" id="modal-desc"></div>
 
-        <div class="variants-section" id="variants-section">
+        <div class="variants-section">
           <div class="variants-label">Selecciona un tono:</div>
           <div class="variants-list" id="variants-list"></div>
           <div class="variant-detail" id="variant-detail" style="display:none">
@@ -133,7 +138,6 @@
       <button class="admin-close" onclick="closeAdmin()">×</button>
     </div>
 
-    <!-- TAB PRODUCTOS -->
     <div id="tab-productos">
       <h3 class="admin-section-title" id="form-title">Nuevo producto</h3>
       <div class="form-grid">
@@ -172,7 +176,7 @@
           <textarea id="f-info" placeholder="Libre de parabenos..."></textarea>
         </div>
         <div class="form-group full">
-          <label>Ícono (si no hay foto general)</label>
+          <label>Ícono (si no hay foto)</label>
           <div class="emoji-picker" id="emoji-picker">
             <span class="emoji-opt selected" data-e="💄">💄</span>
             <span class="emoji-opt" data-e="👄">👄</span>
@@ -200,20 +204,19 @@
         <button class="btn-submit" id="btn-submit" onclick="submitProduct()">
           <span id="btn-submit-text">Publicar producto</span>
         </button>
-        <button class="btn-cancel-edit" id="btn-cancel-edit" onclick="cancelEdit()" style="display:none">Cancelar edición</button>
+        <button class="btn-cancel-edit" id="btn-cancel-edit" onclick="cancelEdit()" style="display:none">Cancelar</button>
       </div>
 
       <div class="admin-list" id="admin-list-wrap" style="display:none">
-        <h3 class="admin-section-title" style="margin-top:2rem">Productos publicados (<span id="admin-count">0</span>)</h3>
+        <h3 class="admin-section-title" style="margin-top:2rem">Productos (<span id="admin-count">0</span>)</h3>
         <div id="admin-list"></div>
       </div>
     </div>
 
-    <!-- TAB AJUSTES -->
     <div id="tab-ajustes" style="display:none">
       <h3 class="admin-section-title">Ajustes generales</h3>
       <div class="form-group" style="margin-bottom:1.5rem">
-        <label>Número de WhatsApp (con código país, sin +)</label>
+        <label>Número de WhatsApp (sin +)</label>
         <input type="text" id="s-whatsapp" placeholder="56912345678">
         <small style="color:var(--muted);font-size:11px;margin-top:4px;display:block">Ej: 56912345678 para Chile</small>
       </div>
@@ -222,8 +225,7 @@
         <div class="upload-area" id="logo-upload-area">
           <div class="upload-placeholder" id="logo-placeholder" onclick="document.getElementById('logo-file').click()">
             <span class="upload-icon">🖼️</span>
-            <p>Subir logo</p>
-            <small>PNG o SVG recomendado</small>
+            <p>Subir logo</p><small>PNG o SVG recomendado</small>
           </div>
           <input type="file" id="logo-file" accept="image/*" style="display:none">
           <div class="upload-preview" id="logo-preview" style="display:none">
@@ -231,19 +233,17 @@
             <button class="btn-remove-img" onclick="removeLogo()">× Cambiar</button>
           </div>
           <div class="upload-progress" id="logo-progress" style="display:none">
-            <div class="progress-bar"><div class="progress-fill" id="logo-progress-fill"></div></div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
             <small>Subiendo logo...</small>
           </div>
         </div>
       </div>
       <button class="btn-submit" onclick="saveSettings()">Guardar ajustes</button>
     </div>
-
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script src="/js/app.js"></script>
 </body>
 </html>

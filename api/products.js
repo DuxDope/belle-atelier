@@ -26,9 +26,7 @@ module.exports = async function handler(req, res) {
       try {
         const jwt = require('jsonwebtoken');
         jwt.verify(auth.replace('Bearer ', ''), process.env.JWT_SECRET);
-      } catch {
-        return res.status(401).json({ error: 'Token inválido' });
-      }
+      } catch { return res.status(401).json({ error: 'Token inválido' }); }
 
       const { name, brand, cat, desc, info, badge, emoji, image_url, variants } = req.body;
       if (!name || !brand || !cat || !desc) return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -43,8 +41,10 @@ module.exports = async function handler(req, res) {
       const insertedVariants = [];
       for (const v of variants) {
         const { rows: [variant] } = await client.query(
-          `INSERT INTO variants (product_id, tone, price, stock, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-          [product.id, v.tone, Number(v.price)||0, Number(v.stock)||0, v.image_url||'']
+          `INSERT INTO variants (product_id, tone, price, stock, image_url, image_url2, image_url3)
+           VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+          [product.id, v.tone, Number(v.price)||0, Number(v.stock)||0,
+           v.image_url||'', v.image_url2||'', v.image_url3||'']
         );
         insertedVariants.push(variant);
       }
