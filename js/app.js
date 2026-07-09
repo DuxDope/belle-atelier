@@ -110,8 +110,8 @@ function selectVariant(variantId){
   document.getElementById('variant-price').textContent=fmt(selectedVariant.price);
   const stockEl=document.getElementById('variant-stock');
   if(selectedVariant.stock===0){stockEl.textContent='Agotado';stockEl.className='variant-stock agotado'}
-  else if(selectedVariant.stock<=5){stockEl.textContent=`¡Últimas ${selectedVariant.stock} unidades!`;stockEl.className='variant-stock bajo'}
-  else{stockEl.textContent=`${selectedVariant.stock} en stock`;stockEl.className='variant-stock'}
+  else if(selectedVariant.stock<=5){stockEl.textContent='¡Últimas unidades!';stockEl.className='variant-stock bajo'}
+  else{stockEl.textContent='';stockEl.className='variant-stock'}
   document.getElementById('btn-wsp').disabled=selectedVariant.stock===0;
 }
 
